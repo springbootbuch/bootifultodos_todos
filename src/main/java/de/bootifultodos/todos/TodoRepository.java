@@ -15,6 +15,8 @@
  */
 package de.bootifultodos.todos;
 
+import java.util.List;
+import java.util.Optional;
 import org.springframework.data.repository.Repository;
 
 /**
@@ -23,4 +25,9 @@ import org.springframework.data.repository.Repository;
  * @author Michael J. Simons, 2017-03-13
  */
 public interface TodoRepository extends Repository<Todo, String> {
+	Todo save(Todo entity);
+
+	Optional<Todo> findOne(String id);
+
+	List<Todo> findAll();
 }
