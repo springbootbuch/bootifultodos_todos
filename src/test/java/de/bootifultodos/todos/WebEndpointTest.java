@@ -16,6 +16,7 @@
 package de.bootifultodos.todos;
 
 import de.bootifultodos.todos.Todo.Status;
+import java.util.Locale;
 import java.util.Optional;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -28,7 +29,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -40,6 +43,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.i18n.FixedLocaleResolver;
 
 /**
  * @author Michael J. Simons, 2017-04-05
@@ -51,12 +56,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 )
 public class WebEndpointTest {
 
+	/**
+	 * Makes the tests locale aware.
+	 */
+	@TestConfiguration
+	static class Config {
+		
+		@Bean
+		public LocaleResolver localeResolver() {
+			return new FixedLocaleResolver(Locale.GERMANY);
+		}
+	}
+	
 	@MockBean
 	private TodoRepository todoRepository;
-
+	
 	@Autowired
 	private MockMvc mvc;
-
+	
 	@Test
 	public void emptyFormShouldWork() throws Exception {
 		this.mvc
@@ -68,14 +85,14 @@ public class WebEndpointTest {
 			.andExpect(model().attribute("method", "POST"))
 			.andExpect(model().attribute("statii", Todo.Status.values()));
 	}
-
+	
 	@Test
 	public void filledFormShouldWork() throws Exception {
 		final Todo todo = new Todo();
 		todo.setAufgabe("test");
 		todo.setStatus(Todo.Status.OFFEN);
 		when(todoRepository.findOne("23")).thenReturn(Optional.of(todo));
-
+		
 		this.mvc
 			.perform(get("/todos/23"))
 			.andExpect(status().isOk())
@@ -85,13 +102,13 @@ public class WebEndpointTest {
 			.andExpect(model().attribute("method", "PUT"))
 			.andExpect(model().attribute("statii", Todo.Status.values()));
 	}
-
+	
 	@Test
 	public void createShouldWorkWithValidData() throws Exception {
 		final Todo todo = new Todo();
 		ReflectionTestUtils.setField(todo, "id", "23");
 		when(todoRepository.save(any(Todo.class))).thenReturn(todo);
-
+		
 		this.mvc
 			.perform(
 				post("/todos")
@@ -100,7 +117,7 @@ public class WebEndpointTest {
 			.andExpect(status().isFound())
 			.andExpect(view().name("redirect:/todos/23"));
 	}
-
+	
 	@Test
 	public void createShouldWorkWithInValidData() throws Exception {
 		final Todo todo = new Todo();
@@ -113,7 +130,7 @@ public class WebEndpointTest {
 			.andExpect(model().attributeHasFieldErrors("todo", "aufgabe", "status"))
 			.andExpect(view().name("form"));
 	}
-
+	
 	@Test
 	public void updateShouldWorkWithInvalidTodo() throws Exception {
 		when(todoRepository.findOne("23")).thenReturn(Optional.empty());
@@ -124,21 +141,21 @@ public class WebEndpointTest {
 				.param("status", "ERLEDIGT"))
 			.andExpect(status().isNotFound());
 	}
-
+	
 	@Test
 	public void updateShouldWorkWithValidData() throws Exception {
 		final Todo todo = new Todo();
 		ReflectionTestUtils.setField(todo, "id", "23");
 		when(todoRepository.findOne("23")).thenReturn(Optional.of(todo));
 		when(todoRepository.save(any(Todo.class))).then(returnsFirstArg());
-
+		
 		this.mvc
 			.perform(put("/todos/23")
 				.param("aufgabe", "test")
 				.param("status", "ERLEDIGT"))
 			.andExpect(status().isFound())
 			.andExpect(view().name("redirect:/todos/23"));
-
+		
 		final ArgumentCaptor<Todo> locationArg = ArgumentCaptor.forClass(Todo.class);
 		verify(todoRepository).save(locationArg.capture());
 		final Todo updatedTodo = locationArg.getValue();
