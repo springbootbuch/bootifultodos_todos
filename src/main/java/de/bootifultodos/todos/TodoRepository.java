@@ -18,12 +18,14 @@ package de.bootifultodos.todos;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.repository.Repository;
+import org.springframework.data.rest.core.annotation.RestResource;
 
 /**
  * Beinhaltet alle Todos.
  *
  * @author Michael J. Simons, 2017-03-13
  */
+@RestResource(path = "todos", rel = "todos")
 public interface TodoRepository extends Repository<Todo, String> {
 	Todo save(Todo entity);
 
