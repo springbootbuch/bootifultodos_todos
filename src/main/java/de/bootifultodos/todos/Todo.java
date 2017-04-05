@@ -45,7 +45,6 @@ public class Todo {
 
 	/** Status des Todos. */
 	@Setter
-	@Getter
 	private Status status;
 
 	public Todo(final String userId, final String aufgabe) {
