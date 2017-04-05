@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!--
+Copyright 2017 michael-simons.eu.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:lang="${#locale.language}">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <title>Bootstrap 101 Template</title>
+
+        <!-- Bootstrap -->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <form action="#" th:action="@{/todos/{id}(id=${id})}" th:object="${todo}" method="POST" th:method="${id} ? 'PUT' : 'POST'">        
+            <div class="form-group" th:classappend="${#fields.hasErrors('aufgabe') ? 'has-error' : ''}">
+                <label for="aufgabe" th:text="#{todo.aufgabe}">Platzhalter</label>
+                <input type="text"  class="form-control" th:placeholder="#{todo.aufgabe}" th:field="*{aufgabe}" />   
+                <span class="help-block" th:if="${#fields.hasErrors('aufgabe')}" th:errors="*{aufgabe}">Liste der Fehler</span>
+            </div>
+            <div class="form-group" th:classappend="${#fields.hasErrors('status') ? 'has-error' : ''}">
+                 <label for="status" th:text="#{todo.status}">Platzhalter</label>
+                <select th:field="*{status}" class="form-control">
+                    <option th:each="type : ${statii}" 
+                            th:value="${type}" 
+                            th:text="#{${'todo.status.' + type}}">Platzhalter</option>
+                </select>            
+                <span class="help-block" th:if="${#fields.hasErrors('status')}" th:errors="*{status}">Liste der Fehler</span>
+            </div>
+
+            <button type="submit" class="btn btn-default" th:text="#{action.save}">Submit</button>
+        </form>
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </body>
+</html>    
+
+
