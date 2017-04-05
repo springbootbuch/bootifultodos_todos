@@ -8,7 +8,7 @@
         <version>1.5.2.RELEASE</version>
         <relativePath/>
     </parent>
-    
+
     <groupId>de.bootifultodos</groupId>
     <artifactId>todos</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -50,24 +50,28 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-        </dependency>       
+        </dependency>
         <dependency>
             <groupId>org.springframework.restdocs</groupId>
             <artifactId>spring-restdocs-mockmvc</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>
         </dependency>
     </dependencies>
 
@@ -95,7 +99,7 @@
                 <configuration>
                     <fork>true</fork>
                 </configuration>
-            </plugin>           
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
@@ -180,5 +184,5 @@
                 </configuration>
             </plugin>
         </plugins>
-    </reporting>    
+    </reporting>
 </project>
