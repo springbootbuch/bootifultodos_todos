@@ -36,9 +36,6 @@ public class Todo {
 
 	private String id;
 
-	/** Externe Id des Besitzers. */
-	private final String userId;
-
 	/** Die zu erledigende Aufgabe */
 	@Setter
 	private String aufgabe;
@@ -46,10 +43,4 @@ public class Todo {
 	/** Status des Todos. */
 	@Setter
 	private Status status;
-
-	public Todo(final String userId, final String aufgabe) {
-		this.userId = userId;
-		this.aufgabe = aufgabe;
-		this.status = Status.OFFEN;
-	}
 }
