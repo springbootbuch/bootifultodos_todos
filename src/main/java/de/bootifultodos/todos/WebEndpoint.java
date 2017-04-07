@@ -52,7 +52,7 @@ public class WebEndpoint {
 	}
 
 	@GetMapping(path = {"/todos/new", "/todos/{id}"})
-	public String form(@PathVariable final Optional<String> id, final Model model) {
+	public String form(@PathVariable final Optional<Long> id, final Model model) {
 		final Optional<Todo> todo = id.flatMap(todoRepository::findOne);
 		model
 			.addAttribute("id", todo.map(Todo::getId).orElse(null))
@@ -72,7 +72,7 @@ public class WebEndpoint {
 
 	@PutMapping(path = "/todos/{id}")
 	public String update(
-		@PathVariable final String id,
+		@PathVariable final Long id,
 		@Valid final Todo updatedTodo, final BindingResult bindingResult
 	) throws NoSuchMethodException {
 		final Todo todo = this.todoRepository

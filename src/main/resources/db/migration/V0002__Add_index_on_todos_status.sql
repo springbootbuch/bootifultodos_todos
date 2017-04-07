@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright 2017 michael-simons.eu.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,23 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.bootifultodos.todos;
 
-import java.util.List;
-import java.util.Optional;
-import org.springframework.data.repository.Repository;
-import org.springframework.data.rest.core.annotation.RestResource;
-
-/**
- * Beinhaltet alle Todos.
- *
- * @author Michael J. Simons, 2017-03-13
- */
-@RestResource(path = "todos", rel = "todos")
-public interface TodoRepository extends Repository<Todo, Long> {
-	Todo save(Todo entity);
-
-	Optional<Todo> findOne(Long id);
-
-	List<Todo> findAll();
-}
+CREATE INDEX idx_todos_status ON todos (status);

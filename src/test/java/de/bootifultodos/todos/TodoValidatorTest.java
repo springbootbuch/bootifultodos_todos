@@ -57,6 +57,6 @@ public class TodoValidatorTest {
 
 		assertThat(errors.hasErrors(), is(true));
 		assertThat(errors.getFieldError("aufgabe").getCode(), is("todo.aufgabe.empty"));
-		assertThat(errors.getFieldError("status").getCode(), is("todo.status.empty"));
+		assertThat(errors.hasFieldErrors("status"), is(false));
 	}
 }

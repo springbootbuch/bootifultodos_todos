@@ -15,9 +15,21 @@
  */
 package de.bootifultodos.todos;
 
+import java.io.Serializable;
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.Table;
+import static lombok.AccessLevel.PROTECTED;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * Eine beliebige, zu erledigendes Aufgabe. Beinhaltet in diesem Kontext noch
@@ -26,21 +38,34 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * @author Michael J. Simons, 2017-03-13
  */
 @SuppressWarnings({"checkstyle:designforextension"})
-@Document(collection = "todos")
+@Entity
+@Table(name = "todos")
+@NoArgsConstructor(access = PROTECTED)
 @Getter
-public class Todo {
+public class Todo implements Serializable {
+
+	private static final long serialVersionUID = -7853758555474031284L;
 
 	public enum  Status {
 		OFFEN, ERLEDIGT
 	}
 
-	private String id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	/** Die zu erledigende Aufgabe */
+	@Lob
+	@Basic(fetch = FetchType.EAGER)
 	@Setter
 	private String aufgabe;
 
 	/** Status des Todos. */
 	@Setter
-	private Status status;
+	@Enumerated(EnumType.STRING)
+	private Status status = Status.OFFEN;
+
+	public Todo(final String aufgabe) {
+		this.aufgabe = aufgabe;
+	}
 }

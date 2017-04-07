@@ -89,15 +89,16 @@ public class WebEndpointTest {
 	@Test
 	public void filledFormShouldWork() throws Exception {
 		final Todo todo = new Todo();
+		ReflectionTestUtils.setField(todo, "id", 23L);
 		todo.setAufgabe("test");
 		todo.setStatus(Todo.Status.OFFEN);
-		when(todoRepository.findOne("23")).thenReturn(Optional.of(todo));
+		when(todoRepository.findOne(23L)).thenReturn(Optional.of(todo));
 		
 		this.mvc
 			.perform(get("/todos/23"))
 			.andExpect(status().isOk())
 			.andExpect(view().name("form"))
-			.andExpect(model().attribute("id", "23"))
+			.andExpect(model().attribute("id", 23L))
 			.andExpect(model().attribute("todo", todo))
 			.andExpect(model().attribute("method", "PUT"))
 			.andExpect(model().attribute("statii", Todo.Status.values()));
@@ -106,7 +107,7 @@ public class WebEndpointTest {
 	@Test
 	public void createShouldWorkWithValidData() throws Exception {
 		final Todo todo = new Todo();
-		ReflectionTestUtils.setField(todo, "id", "23");
+		ReflectionTestUtils.setField(todo, "id", 23L);
 		when(todoRepository.save(any(Todo.class))).thenReturn(todo);
 		
 		this.mvc
@@ -119,21 +120,21 @@ public class WebEndpointTest {
 	}
 	
 	@Test
-	public void createShouldWorkWithInValidData() throws Exception {
+	public void createShouldWorkWithInvalidData() throws Exception {
 		final Todo todo = new Todo();
-		ReflectionTestUtils.setField(todo, "id", "23");
+		ReflectionTestUtils.setField(todo, "id", 23L);
 		when(todoRepository.save(any(Todo.class))).thenReturn(todo);
 		
 		this.mvc
 			.perform(post("/todos"))
 			.andExpect(status().isOk())
-			.andExpect(model().attributeHasFieldErrors("todo", "aufgabe", "status"))
+			.andExpect(model().attributeHasFieldErrors("todo", "aufgabe"))
 			.andExpect(view().name("form"));
 	}
 	
 	@Test
 	public void updateShouldWorkWithInvalidTodo() throws Exception {
-		when(todoRepository.findOne("23")).thenReturn(Optional.empty());
+		when(todoRepository.findOne(23L)).thenReturn(Optional.empty());
 		
 		this.mvc
 			.perform(put("/todos/23")
@@ -145,8 +146,8 @@ public class WebEndpointTest {
 	@Test
 	public void updateShouldWorkWithValidData() throws Exception {
 		final Todo todo = new Todo();
-		ReflectionTestUtils.setField(todo, "id", "23");
-		when(todoRepository.findOne("23")).thenReturn(Optional.of(todo));
+		ReflectionTestUtils.setField(todo, "id", 23L);
+		when(todoRepository.findOne(23L)).thenReturn(Optional.of(todo));
 		when(todoRepository.save(any(Todo.class))).then(returnsFirstArg());
 		
 		this.mvc
@@ -164,15 +165,15 @@ public class WebEndpointTest {
 	}
 	
 	@Test
-	public void updateShouldWorkWithInValidData() throws Exception {
+	public void updateShouldWorkWithInvalidData() throws Exception {
 		final Todo todo = new Todo();
-		ReflectionTestUtils.setField(todo, "id", "23");
-		when(todoRepository.findOne("23")).thenReturn(Optional.of(todo));
+		ReflectionTestUtils.setField(todo, "id", 23L);
+		when(todoRepository.findOne(23L)).thenReturn(Optional.of(todo));
 		
 		this.mvc
 			.perform(put("/todos/23"))
 			.andExpect(status().isOk())
-			.andExpect(model().attributeHasFieldErrors("todo", "aufgabe", "status"))
+			.andExpect(model().attributeHasFieldErrors("todo", "aufgabe"))
 			.andExpect(view().name("form"));
 	}
 }
