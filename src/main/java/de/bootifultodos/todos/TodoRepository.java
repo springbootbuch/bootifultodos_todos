@@ -20,6 +20,8 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.rest.core.annotation.RestResource;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 /**
  * Beinhaltet alle Todos.
@@ -28,8 +30,10 @@ import org.springframework.data.rest.core.annotation.RestResource;
  */
 @RestResource(path = "todos", rel = "todos")
 public interface TodoRepository extends Repository<Todo, Long> {
+	@PreAuthorize("(#entity.userId ?: authentication.name) == authentication.name")
 	Todo save(Todo entity);
 
+	@PostAuthorize("(returnObject.orElse(null)?.userId ?: authentication.name) == authentication.name")
 	Optional<Todo> findOne(Long id);
 
 	@Query("Select e from #{#entityName} e where e.userId = ?#{authentication.name}")

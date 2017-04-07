@@ -21,6 +21,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.rest.core.event.ValidatingRepositoryEventListener;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 
 /**
@@ -29,6 +30,7 @@ import org.springframework.security.data.repository.query.SecurityEvaluationCont
 @SuppressWarnings({"checkstyle:designforextension"})
 @RequiredArgsConstructor
 @SpringBootApplication
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class TodosApplication extends RepositoryRestConfigurerAdapter {
 
 	public static void main(final String... args) {
