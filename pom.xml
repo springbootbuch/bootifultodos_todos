@@ -15,7 +15,7 @@
     <packaging>jar</packaging>
 
     <name>Bootifultodos: Todos</name>
-    <description>Stellt dokumentorientierte Speicherung von Todos, eine REST-API sowie eine simple Oberfläche zur Verwaltung der Todos zur Verfügung.</description>
+    <description>Speichert Todos und stellt eine REST-API sowie eine simple Oberfläche zur Verwaltung derselben zur Verfügung.</description>
     <url>http://bootifultodos.de</url>
     <inceptionYear>2017</inceptionYear>
     <organization>
