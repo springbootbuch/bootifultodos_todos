@@ -17,6 +17,5 @@
 create table todos (
     id                 bigserial primary key,
     aufgabe            text not null,
-    status             varchar(8) not null,
-    name               varchar(32) not null
+    status             varchar(8) not null
 );
