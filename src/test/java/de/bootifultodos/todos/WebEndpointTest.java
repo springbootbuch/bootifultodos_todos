@@ -34,12 +34,15 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -77,7 +80,7 @@ public class WebEndpointTest {
 	@Test
 	public void emptyFormShouldWork() throws Exception {
 		this.mvc
-			.perform(get("/todos/new"))
+			.perform(get("/todos/new").with(user("test")))
 			.andExpect(status().isOk())
 			.andExpect(view().name("form"))
 			.andExpect(model().attributeDoesNotExist("id"))
@@ -95,7 +98,7 @@ public class WebEndpointTest {
 		when(todoRepository.findOne(23L)).thenReturn(Optional.of(todo));
 		
 		this.mvc
-			.perform(get("/todos/23"))
+			.perform(get("/todos/23").with(user("test")))
 			.andExpect(status().isOk())
 			.andExpect(view().name("form"))
 			.andExpect(model().attribute("id", 23L))
@@ -113,6 +116,7 @@ public class WebEndpointTest {
 		this.mvc
 			.perform(
 				post("/todos")
+					.with(user("test"))
 					.param("aufgabe", "test")
 					.param("status", "OFFEN"))
 			.andExpect(status().isFound())
@@ -126,7 +130,7 @@ public class WebEndpointTest {
 		when(todoRepository.save(any(Todo.class))).thenReturn(todo);
 		
 		this.mvc
-			.perform(post("/todos"))
+			.perform(post("/todos").with(user("test")))
 			.andExpect(status().isOk())
 			.andExpect(model().attributeHasFieldErrors("todo", "aufgabe"))
 			.andExpect(view().name("form"));
@@ -138,6 +142,7 @@ public class WebEndpointTest {
 		
 		this.mvc
 			.perform(put("/todos/23")
+				.with(user("test"))
 				.param("aufgabe", "test")
 				.param("status", "ERLEDIGT"))
 			.andExpect(status().isNotFound());
@@ -152,6 +157,7 @@ public class WebEndpointTest {
 		
 		this.mvc
 			.perform(put("/todos/23")
+				.with(user("test"))
 				.param("aufgabe", "test")
 				.param("status", "ERLEDIGT"))
 			.andExpect(status().isFound())
@@ -171,7 +177,7 @@ public class WebEndpointTest {
 		when(todoRepository.findOne(23L)).thenReturn(Optional.of(todo));
 		
 		this.mvc
-			.perform(put("/todos/23"))
+			.perform(put("/todos/23").with(user("test")))
 			.andExpect(status().isOk())
 			.andExpect(model().attributeHasFieldErrors("todo", "aufgabe"))
 			.andExpect(view().name("form"));
