@@ -32,6 +32,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -60,6 +61,7 @@ public class Todo implements Serializable {
 
 	/** Externe Id des Besitzers. */
 	@CreatedBy
+	@ReadOnlyProperty
 	private String userId;
 
 	/** Die zu erledigende Aufgabe */
