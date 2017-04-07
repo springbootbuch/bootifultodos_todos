@@ -55,7 +55,7 @@ public class WebEndpoint {
 	public String form(@PathVariable final Optional<String> id, final Model model) {
 		final Optional<Todo> todo = id.flatMap(todoRepository::findOne);
 		model
-			.addAttribute("id", id.orElse(null))
+			.addAttribute("id", todo.map(Todo::getId).orElse(null))
 			.addAttribute("todo", todo.orElseGet(Todo::new))
 			.addAttribute("method", todo.isPresent() ? "PUT" : "POST");
 		return "form";
