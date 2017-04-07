@@ -40,6 +40,7 @@ import lombok.Setter;
 @SuppressWarnings({"checkstyle:designforextension"})
 @Entity
 @Table(name = "todos")
+@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = PROTECTED)
 @Getter
 public class Todo implements Serializable {
@@ -53,6 +54,10 @@ public class Todo implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	/** Externe Id des Besitzers. */
+	@CreatedBy
+	private String userId;
 
 	/** Die zu erledigende Aufgabe */
 	@Lob
