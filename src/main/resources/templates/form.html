@@ -41,7 +41,7 @@ limitations under the License.
                 <input type="text"  class="form-control" th:placeholder="#{todo.aufgabe}" th:field="*{aufgabe}" />   
                 <span class="help-block" th:if="${#fields.hasErrors('aufgabe')}" th:errors="*{aufgabe}">Liste der Fehler</span>
             </div>
-            <div class="form-group" th:classappend="${#fields.hasErrors('status') ? 'has-error' : ''}">
+            <div class="form-group" th:if="${id}" th:classappend="${#fields.hasErrors('status') ? 'has-error' : ''}">
                  <label for="status" th:text="#{todo.status}">Platzhalter</label>
                 <select th:field="*{status}" class="form-control">
                     <option th:each="type : ${statii}" 
