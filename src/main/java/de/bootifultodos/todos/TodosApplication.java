@@ -18,8 +18,10 @@ package de.bootifultodos.todos;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.rest.core.event.ValidatingRepositoryEventListener;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
+import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 
 /**
  * @author Michael J. Simons, 2017-03-10
@@ -39,5 +41,10 @@ public class TodosApplication extends RepositoryRestConfigurerAdapter {
 	public void configureValidatingRepositoryEventListener(final ValidatingRepositoryEventListener el) {
 		el.addValidator("beforeCreate", todoValidator);
 		el.addValidator("beforeSave", todoValidator);
+	}
+
+	@Bean
+	public SecurityEvaluationContextExtension securityEvaluationContextExtension() {
+		return new SecurityEvaluationContextExtension();
 	}
 }

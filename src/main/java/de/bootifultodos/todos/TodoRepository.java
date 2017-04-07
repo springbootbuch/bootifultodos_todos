@@ -17,6 +17,7 @@ package de.bootifultodos.todos;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.rest.core.annotation.RestResource;
 
@@ -31,5 +32,6 @@ public interface TodoRepository extends Repository<Todo, Long> {
 
 	Optional<Todo> findOne(Long id);
 
+	@Query("Select e from #{#entityName} e where e.userId = ?#{authentication.name}")
 	List<Todo> findAll();
 }
