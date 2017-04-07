@@ -24,6 +24,7 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapt
 /**
  * @author Michael J. Simons, 2017-03-10
  */
+@SuppressWarnings({"checkstyle:designforextension"})
 @RequiredArgsConstructor
 @SpringBootApplication
 public class TodosApplication extends RepositoryRestConfigurerAdapter {
@@ -35,7 +36,7 @@ public class TodosApplication extends RepositoryRestConfigurerAdapter {
 	private final TodoValidator todoValidator;
 
 	@Override
-	public final void configureValidatingRepositoryEventListener(final ValidatingRepositoryEventListener el) {
+	public void configureValidatingRepositoryEventListener(final ValidatingRepositoryEventListener el) {
 		el.addValidator("beforeCreate", todoValidator);
 		el.addValidator("beforeSave", todoValidator);
 	}
