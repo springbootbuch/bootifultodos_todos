@@ -151,6 +151,7 @@
                 <configuration>
                     <excludes>
                         <!-- Application starter -->
+                        <exclude>de/bootifultodos/todos/*Config.class</exclude>
                         <exclude>de/bootifultodos/todos/TodosApplication.class</exclude>
                     </excludes>
                 </configuration>
