@@ -29,7 +29,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
  * @author Michael J. Simons, 2017-03-13
  */
 @RestResource(path = "todos", rel = "todos")
-public interface TodoRepository 
+public interface TodoRepository
 	extends Repository<Todo, Long> {
 
 	@PreAuthorize("(#entity.userId ?: authentication.name) == authentication.name")

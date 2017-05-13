@@ -46,7 +46,7 @@ public class TodosApplication extends RepositoryRestConfigurerAdapter {
 	}
 
 	@Bean
-	public SecurityEvaluationContextExtension 
+	public SecurityEvaluationContextExtension
 		securityEvaluationContextExtension() {
 		return new SecurityEvaluationContextExtension();
 	}
