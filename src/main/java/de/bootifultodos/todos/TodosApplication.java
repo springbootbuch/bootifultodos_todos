@@ -18,6 +18,7 @@ package de.bootifultodos.todos;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.rest.core.event.ValidatingRepositoryEventListener;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
@@ -31,6 +32,7 @@ import org.springframework.security.data.repository.query.SecurityEvaluationCont
 @RequiredArgsConstructor
 @SpringBootApplication
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableEurekaClient
 public class TodosApplication extends RepositoryRestConfigurerAdapter {
 
 	public static void main(final String... args) {
