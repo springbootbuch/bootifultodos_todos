@@ -16,6 +16,7 @@
 package de.bootifultodos.todos;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -27,11 +28,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import static lombok.AccessLevel.PROTECTED;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -64,11 +68,17 @@ public class Todo implements Serializable {
 	@ReadOnlyProperty
 	private String userId;
 
-	/** Die zu erledigende Aufgabe */
+	/** Die zu erledigende Aufgabe. */
 	@Lob
 	@Basic(fetch = FetchType.EAGER)
 	@Setter
 	private String aufgabe;
+
+	/** Datum der letzten Änderung. */
+	@LastModifiedDate
+	@ReadOnlyProperty
+	@Temporal(TemporalType.TIMESTAMP)
+	private Calendar updatedAt;
 
 	/** Status des Todos. */
 	@Setter
