@@ -15,6 +15,8 @@
  */
 package de.bootifultodos.todos;
 
+import java.util.Optional;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -32,6 +34,6 @@ public class AuditingConfig {
 
 	@Bean
 	public AuditorAware<String> createAuditorProvider() {
-		return () -> SecurityContextHolder.getContext().getAuthentication().getName();
+		return () -> Optional.of(SecurityContextHolder.getContext().getAuthentication().getName());
 	}
 }

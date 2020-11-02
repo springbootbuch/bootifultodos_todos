@@ -74,7 +74,7 @@ public class WebEndpoint {
 	public String update(
 		@PathVariable final Long id,
 		@Valid final Todo updatedTodo, final BindingResult bindingResult
-	) throws NoSuchMethodException {
+	) {
 		final Todo todo = this.todoRepository
 			.findOne(id)
 			.orElseThrow(TodoNotFoundException::new);

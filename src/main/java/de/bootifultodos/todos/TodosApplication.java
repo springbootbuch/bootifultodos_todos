@@ -16,12 +16,13 @@
 package de.bootifultodos.todos;
 
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.rest.core.event.ValidatingRepositoryEventListener;
-import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
+import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 
@@ -33,7 +34,7 @@ import org.springframework.security.data.repository.query.SecurityEvaluationCont
 @SpringBootApplication
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableDiscoveryClient
-public class TodosApplication extends RepositoryRestConfigurerAdapter {
+public class TodosApplication implements RepositoryRestConfigurer {
 
 	public static void main(final String... args) {
 		SpringApplication.run(TodosApplication.class, args);

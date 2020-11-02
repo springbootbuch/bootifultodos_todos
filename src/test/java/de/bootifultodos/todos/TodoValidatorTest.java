@@ -15,9 +15,9 @@
  */
 package de.bootifultodos.todos;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
@@ -29,8 +29,8 @@ public class TodoValidatorTest {
 	@Test
 	public void supportsShouldWork() {
 		final TodoValidator todoValidator = new TodoValidator();
-		assertThat(todoValidator.supports(Todo.class), is(true));
-		assertThat(todoValidator.supports(TodoValidator.class), is(false));
+		assertThat(todoValidator.supports(Todo.class)).isTrue();
+		assertThat(todoValidator.supports(TodoValidator.class)).isFalse();
 	}
 
 	@Test
@@ -44,7 +44,7 @@ public class TodoValidatorTest {
 		Errors errors = new BeanPropertyBindingResult(validTodo, "todo");
 		todoValidator.validate(validTodo, errors);
 
-		assertThat(errors.hasErrors(), is(false));
+		assertThat(errors.hasErrors()).isFalse();
 	}
 
 	@Test
@@ -55,8 +55,8 @@ public class TodoValidatorTest {
 		Errors errors = new BeanPropertyBindingResult(invalidTodo, "todo");
 		todoValidator.validate(invalidTodo, errors);
 
-		assertThat(errors.hasErrors(), is(true));
-		assertThat(errors.getFieldError("aufgabe").getCode(), is("todo.aufgabe.empty"));
-		assertThat(errors.hasFieldErrors("status"), is(false));
+		assertThat(errors.hasErrors()).isTrue();
+		assertThat(errors.getFieldError("aufgabe").getCode()).isEqualTo("todo.aufgabe.empty");
+		assertThat(errors.hasFieldErrors("status")).isFalse();
 	}
 }

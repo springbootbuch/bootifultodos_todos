@@ -15,42 +15,40 @@
  */
 package de.bootifultodos.todos;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.AdditionalAnswers.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
+import static org.springframework.context.annotation.FilterType.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 import de.bootifultodos.todos.Todo.Status;
+
 import java.util.Locale;
 import java.util.Optional;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import static org.mockito.AdditionalAnswers.returnsFirstArg;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan.Filter;
-import static org.springframework.context.annotation.FilterType.ASSIGNABLE_TYPE;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.FixedLocaleResolver;
 
 /**
  * @author Michael J. Simons, 2017-04-05
  */
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @WebMvcTest(
 	includeFilters
 	= @Filter(type = ASSIGNABLE_TYPE, classes = TodoValidator.class)
@@ -106,6 +104,7 @@ public class WebEndpointTest {
 	}
 	
 	@Test
+	@WithMockUser("test")
 	public void createShouldWorkWithValidData() throws Exception {
 		final Todo todo = new Todo();
 		ReflectionTestUtils.setField(todo, "id", 23L);
@@ -164,8 +163,8 @@ public class WebEndpointTest {
 		final ArgumentCaptor<Todo> locationArg = ArgumentCaptor.forClass(Todo.class);
 		verify(todoRepository).save(locationArg.capture());
 		final Todo updatedTodo = locationArg.getValue();
-		assertThat(updatedTodo.getAufgabe(), is("test"));
-		assertThat(updatedTodo.getStatus(), is(Status.ERLEDIGT));
+		assertThat(updatedTodo.getAufgabe()).isEqualTo("test");
+		assertThat(updatedTodo.getStatus()).isEqualTo(Status.ERLEDIGT);
 	}
 	
 	@Test
