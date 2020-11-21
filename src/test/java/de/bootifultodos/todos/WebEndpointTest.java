@@ -74,7 +74,7 @@ public class WebEndpointTest {
 	private MockMvc mvc;
 	
 	@Test
-	public void emptyFormShouldWork() throws Exception {
+	void emptyFormShouldWork() throws Exception {
 		this.mvc
 			.perform(get("/todos/new").with(user("test")))
 			.andExpect(status().isOk())
@@ -86,7 +86,7 @@ public class WebEndpointTest {
 	}
 	
 	@Test
-	public void filledFormShouldWork() throws Exception {
+	void filledFormShouldWork() throws Exception {
 		final Todo todo = new Todo();
 		ReflectionTestUtils.setField(todo, "id", 23L);
 		todo.setAufgabe("test");
@@ -104,8 +104,8 @@ public class WebEndpointTest {
 	}
 	
 	@Test
-	@WithMockUser("test")
-	public void createShouldWorkWithValidData() throws Exception {
+	@WithMockUser
+	void createShouldWorkWithValidData() throws Exception {
 		final Todo todo = new Todo();
 		ReflectionTestUtils.setField(todo, "id", 23L);
 		when(todoRepository.save(any(Todo.class))).thenReturn(todo);
@@ -113,7 +113,7 @@ public class WebEndpointTest {
 		this.mvc
 			.perform(
 				post("/todos")
-					.with(user("test"))
+					.with(user("test")).with(csrf())
 					.param("aufgabe", "test")
 					.param("status", "OFFEN"))
 			.andExpect(status().isFound())
@@ -121,32 +121,32 @@ public class WebEndpointTest {
 	}
 	
 	@Test
-	public void createShouldWorkWithInvalidData() throws Exception {
+	void createShouldWorkWithInvalidData() throws Exception {
 		final Todo todo = new Todo();
 		ReflectionTestUtils.setField(todo, "id", 23L);
 		when(todoRepository.save(any(Todo.class))).thenReturn(todo);
 		
 		this.mvc
-			.perform(post("/todos").with(user("test")))
+			.perform(post("/todos").with(user("test")).with(csrf()))
 			.andExpect(status().isOk())
 			.andExpect(model().attributeHasFieldErrors("todo", "aufgabe"))
 			.andExpect(view().name("form"));
 	}
 	
 	@Test
-	public void updateShouldWorkWithInvalidTodo() throws Exception {
+	void updateShouldWorkWithInvalidTodo() throws Exception {
 		when(todoRepository.findOne(23L)).thenReturn(Optional.empty());
 		
 		this.mvc
 			.perform(put("/todos/23")
-				.with(user("test"))
+				.with(user("test")).with(csrf())
 				.param("aufgabe", "test")
 				.param("status", "ERLEDIGT"))
 			.andExpect(status().isNotFound());
 	}
 	
 	@Test
-	public void updateShouldWorkWithValidData() throws Exception {
+	void updateShouldWorkWithValidData() throws Exception {
 		final Todo todo = new Todo();
 		ReflectionTestUtils.setField(todo, "id", 23L);
 		when(todoRepository.findOne(23L)).thenReturn(Optional.of(todo));
@@ -154,7 +154,7 @@ public class WebEndpointTest {
 		
 		this.mvc
 			.perform(put("/todos/23")
-				.with(user("test"))
+				.with(user("test")).with(csrf())
 				.param("aufgabe", "test")
 				.param("status", "ERLEDIGT"))
 			.andExpect(status().isFound())
@@ -168,13 +168,13 @@ public class WebEndpointTest {
 	}
 	
 	@Test
-	public void updateShouldWorkWithInvalidData() throws Exception {
+	void updateShouldWorkWithInvalidData() throws Exception {
 		final Todo todo = new Todo();
 		ReflectionTestUtils.setField(todo, "id", 23L);
 		when(todoRepository.findOne(23L)).thenReturn(Optional.of(todo));
 		
 		this.mvc
-			.perform(put("/todos/23").with(user("test")))
+			.perform(put("/todos/23").with(user("test")).with(csrf()))
 			.andExpect(status().isOk())
 			.andExpect(model().attributeHasFieldErrors("todo", "aufgabe"))
 			.andExpect(view().name("form"));
